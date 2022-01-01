@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Text, TouchableOpacity, View, StyleSheet , Image } from "react-native";
-import Login from "../Components/LoginPage";
-import SignUp from "../Components/SignUpPage";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -21,35 +19,31 @@ function CustomDrawer({ navigation }) {
       }
       getUserName(); 
 
-    
-     
-    }, []);
+    }, [GetName]);
     const clearLocal = () =>{
       AsyncStorage.removeItem('token');
       AsyncStorage.removeItem('username');
       setGetName("");
       navigation.navigate("Home");
     }
+    const gotoLogin = ()=>{
+      if(!GetName){
+        navigation.navigate("Home");
+      }
+      else{
+        navigation.navigate("All Polls");
+      }
+    }
 
     
   return (
     <View style={styles.container}>
       <View style={styles.drawerUpper}>
-        <View style={{display  :"flex" , flexDirection : "column" , alignItems : "flex-end", marginHorizontal  :15}}>
-          <Image source={require('../Assets/user1.jpg')} style={{width : 50 , height : 50, borderRadius : "50%" , marginRight : 15}} />
-          <TouchableOpacity><Text style={{fontSize : 18, color : "#fff"}}>{GetName ? GetName : "user name"}</Text></TouchableOpacity>
+        <View style={{display  :"flex" , flexDirection : "column" , alignItems : "center", marginHorizontal  :15 , marginBottom : 25}}>
+          <Image source={require('../Assets/user1.jpg')} style={{width : 50 , height : 50, borderRadius : 50}}/>
+          <TouchableOpacity onPress={()=>gotoLogin()}>
+          <Text style={{fontSize : 18, color : "#fff" , textAlign : "center"}}>{GetName}</Text></TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
-          style={styles.drawerBtns}
-        >
-          <View style={styles.BtnDiv}>
-            <Icon name="home" size={25} color="#fff" />
-            <Text style={styles.drawerBtnsText}>Home</Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Create poll");
@@ -99,17 +93,7 @@ function CustomDrawer({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Register");
-          }}
-          style={{...styles.drawerBtns }}
-        >
-          <View style={styles.BtnDiv}>
-            <Icon name="sign-out" size={25} color="#fff" />
-            <Text style={styles.drawerBtnsText}>signup</Text>
-          </View>
-        </TouchableOpacity>
+       
       </View>
     </View>
   );
@@ -123,11 +107,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   drawerBtns: {
-    // borderWidth: 1,
+  
     borderColor: "#ccc",
     padding: 5,
-    // backgroundColor: "#ccc",
-    // width: 150,
+  
     marginBottom: 10,
     borderRadius: 5,
   },
@@ -144,7 +127,7 @@ const styles = StyleSheet.create({
   BtnDiv :{
       display : "flex",
       flexDirection : "row",
-    //   justifyContent : "space-around",
+  
       alignItems : "center",
       marginHorizontal : 18
 
